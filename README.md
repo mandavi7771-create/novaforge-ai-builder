@@ -2,6 +2,10 @@
 
 An independent, original-code MVP for creating and iterating on websites with an AI chat workflow. It includes account registration/login, persistent project management, screenshot-aware generation, an editable code workspace, sandboxed live preview, and HTML export.
 
+## Review page
+
+The standalone, responsive product overview and feature review is available at `/review` when the app is running. It presents NovaForge's original product design, workflow, free-use policy, and the actual scope of the MVP.
+
 ## Run locally
 
 Requirements: Node.js 20+.
@@ -12,7 +16,7 @@ npm install
 npm start
 ```
 
-Open http://localhost:3000. Accounts and projects are stored in `novaforge.db` (SQLite). Set a strong `SESSION_SECRET` before deployment.
+Open http://localhost:3000 (builder) or http://localhost:3000/review (product review). Accounts and projects are stored in `novaforge.db` (SQLite). Set a strong `SESSION_SECRET` before deployment.
 
 ## Enable real AI generation
 
