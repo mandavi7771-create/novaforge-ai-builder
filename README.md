@@ -1,10 +1,10 @@
 # NovaForge — AI Website & App Builder
 
-An independent, original-code MVP for creating and iterating on websites with an AI chat workflow. It includes account registration/login, persistent project management, screenshot-aware generation, an editable code workspace, sandboxed live preview, and HTML export.
+An independent, original-code MVP for creating and iterating on websites with an AI chat workflow. It includes account registration/login, persistent project management, screenshot-aware generation, an editable code workspace, sandboxed live preview, and HTML export. No subscriptions or premium feature locks.
 
 ## Review page
 
-The standalone, responsive product overview and feature review is available at `/review` when the app is running. It presents NovaForge's original product design, workflow, free-use policy, and the actual scope of the MVP.
+The responsive product overview and feature review is available at `/review.html` (with `/review` as a short redirect) when the app is running.
 
 ## Run locally
 
@@ -16,20 +16,31 @@ npm install
 npm start
 ```
 
-Open http://localhost:3000 (builder) or http://localhost:3000/review (product review). Accounts and projects are stored in `novaforge.db` (SQLite). Set a strong `SESSION_SECRET` before deployment.
+Open http://localhost:3000 (builder) or http://localhost:3000/review (review page). Accounts and projects are stored in `novaforge.db` (SQLite). Set a long, unique `SESSION_SECRET` before deployment.
 
-## Enable real AI generation
+## Free local AI generation (no API usage fees)
 
-Set `AI_API_KEY` in `.env` to a key from an OpenAI-compatible provider. Optionally adjust `AI_BASE_URL` and `AI_MODEL`. The key stays on the server and is never sent to the browser. The AI feature returns a clear configuration error until a key is provided; project creation, editing, preview, and export still work without it. Provider API usage may cost money; NovaForge has no subscription or paid-feature lock, but cannot cover third-party inference or hosting charges.
+NovaForge's AI backend uses the OpenAI-compatible chat-completions format. `.env.example` is configured for a local Ollama server, so AI prompts can run without a paid AI API subscription or per-request provider fee. Your computer still uses electricity and needs enough memory/compute for the selected model.
 
-Image uploads are sent to the configured vision-capable model as part of the generation request. A reference URL is passed as context for the model; this MVP does not crawl external websites. Generated previews run in a sandboxed iframe. Treat generated code as untrusted and review it before deployment.
+1. Install Ollama from https://ollama.com/.
+2. Download a code-capable model, for example: `ollama pull qwen2.5-coder:7b`.
+3. Start Ollama (`ollama serve` if it is not already running).
+4. Copy `.env.example` to `.env` and keep `AI_BASE_URL=http://127.0.0.1:11434/v1`, `AI_API_KEY=ollama`, and the model name consistent with the model you pulled.
+5. Run NovaForge with `npm start`.
+
+Ollama's OpenAI-compatible local API is documented at https://docs.ollama.com/api/openai-compatibility. The local model runs on your own machine; NovaForge does not send prompts to an external AI service with this configuration. Screenshot input requires a local vision-capable model compatible with image input; a text-only model may reject screenshots. If Ollama is not installed/running or the model is not downloaded, generation will fail with a connection/model error rather than pretending to work.
+
+### Optional hosted AI provider
+
+You may instead configure `AI_API_KEY`, `AI_BASE_URL`, and `AI_MODEL` for an OpenAI-compatible hosted provider. That provider may charge for inference. The key stays server-side. NovaForge itself still has no subscription or premium lock, and third-party AI/hosting costs are the user's responsibility.
 
 ## What's included / limits
 
-- Email/password authentication with scrypt password hashes, signed HttpOnly session cookies, and expiring SQLite-backed sessions.
+- Email/password authentication with scrypt password hashes, HttpOnly session cookies, and expiring SQLite-backed sessions.
 - Authenticated project CRUD and persistent generated HTML.
-- AI prompt iteration and optional screenshot input through a server-side OpenAI-compatible API.
-- Editable HTML source, instant preview, and downloadable HTML.
+- AI prompt iteration through a local or hosted OpenAI-compatible model.
+- Optional screenshot context when using a compatible vision model.
+- Editable HTML source, instant sandboxed preview, and downloadable HTML.
 - No billing, subscription, or premium feature gates.
 
-This is a deployable MVP, not a claim of production-grade multi-tenant infrastructure or one-click hosting. Configure HTTPS, backups, a persistent volume for SQLite, and your AI provider before production use. External references are not copied; use only material you have permission to reproduce.
+This is a deployable MVP, not a claim of production-grade multi-tenant infrastructure or one-click hosting. Configure HTTPS, backups, and a persistent database volume before production use. A reference URL is passed as prompt context; NovaForge does not crawl external websites. Use only reference materials you have permission to reproduce, and review generated code before deployment.
