@@ -1,0 +1,16 @@
+{
+  "name": "novaforge-ai-builder",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Independent AI website and app builder MVP",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "better-sqlite3": "^11.8.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
+}
